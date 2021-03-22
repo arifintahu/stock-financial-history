@@ -14,6 +14,9 @@
             <div class="container p-3 body">
                 <section id="section-search">
                     <div class="bg-white text-center p-3 mb-3 shadow-sm">
+                        <div class="content d-flex px-5 mb-3">
+                            <input class="form-control form-control-lg" type="text" placeholder="Security Code" v-model="security_code">
+                        </div>
                         <div class="content d-flex px-5">
                             <input class="form-control form-control-lg" type="text" placeholder="Stock Code" v-model="stock_code">
                             <button v-if="loading" type="button" class="btn btn-outline-primary ml-2 btn-width d-flex align-items-center" disabled>
@@ -36,13 +39,14 @@
             const app = new Vue({
                 data: function() {
                     return {
+                        security_code: '',
                         stock_code: '',
                         loading: false
                     }
                 },
                 methods: {
                     downloadFile() {
-                        if (this.stock_code) {
+                        if (this.stock_code && this.security_code) {
                             this.loading = true;
                             fetch(`/download`, {
                                 method: 'POST',
@@ -50,7 +54,8 @@
                                   'Content-Type': 'application/json'
                                 },
                                 body: JSON.stringify({
-                                    stock_code: this.stock_code
+                                    stock_code: this.stock_code,
+                                    security_code: this.security_code
                                 })
                             })
                             .then(response => response.blob())
@@ -69,7 +74,7 @@
                                 }, 0);
                             });
                         } else {
-                            alert('Stock Code is missing');
+                            alert('Stock Code and Security Code are missing');
                         }
                     }
                 }           
