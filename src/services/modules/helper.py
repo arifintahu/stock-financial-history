@@ -3,15 +3,15 @@ from bs4 import BeautifulSoup
 import numpy as np
 import pandas as pd
 
-def get_data(stock_code, year):
-    r  = requests.get('https://www.poems.co.id/asp/stocks/research/HistoryValue.asp?a=CBDMIF&s=101323752156313.62&StockCode='+ stock_code + '&nYear=' + year)
+def get_data(stock_code, year, security_code):
+    r  = requests.get('https://www.poems.co.id/asp/stocks/research/HistoryValue.asp?a=CBDMIF&s='+ security_code +'&StockCode='+ stock_code + '&nYear=' + year)
     if r.status_code == 200:
         return r.text
     else:
         return ''
 
-def get_year(stock_code):
-    html = get_data(stock_code, '2020')
+def get_year(stock_code, security_code):
+    html = get_data(stock_code, '2020', security_code)
     soup = BeautifulSoup(html, 'html.parser')
     year_list = []
     for i in soup.find_all('option'):
@@ -44,11 +44,11 @@ def parse_number(str_number):
     else:
         return int(str_number)
 
-def run_mining(stock_code):
-    list_year = get_year(stock_code) 
+def run_mining(stock_code, security_code):
+    list_year = get_year(stock_code, security_code)
     data_field = {}
     for i in list_year:
-        html = get_data(stock_code, i)
+        html = get_data(stock_code, i, security_code)
         soup = BeautifulSoup(html, 'html.parser')
         for i in soup.find_all('table')[1].find_all('fieldset'):
             if i.legend:

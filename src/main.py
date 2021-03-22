@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, make_response
-from services.minerService import downloadFile
+from src.services.minerService import downloadFile
 
 class CustomFlask(Flask):
 	jinja_options = Flask.jinja_options.copy()
@@ -18,14 +18,12 @@ def index():
 @app.route("/download", methods=["POST"])
 def download():
 	if request.method == "POST":
-		body = request.get_json()
-		stock_code = body['stock_code']
-		csv_output = downloadFile(stock_code)
-		resp = make_response(csv_output)
+		body 			= request.get_json()
+		stock_code 		= body['stock_code']
+		security_code 	= body['security_code']
+		csv_output 		= downloadFile(stock_code, security_code)
+		resp 			= make_response(csv_output)
 		resp.headers["Content-Disposition"] = ("attachment; filename=financial-history-%s.csv" % stock_code)
 		resp.headers["Content-Type"] = "text/csv"
 		return resp
-
-if __name__ == "__main__":
-	app.run(debug=True)
 	
