@@ -21,7 +21,8 @@ def download():
 		body 			= request.get_json()
 		stock_code 		= body['stock_code']
 		security_code 	= body['security_code']
-		csv_output 		= downloadFile(stock_code, security_code)
+		username 		= body['username']
+		csv_output 		= downloadFile(stock_code, security_code, username)
 		resp 			= make_response(csv_output)
 		resp.headers["Content-Disposition"] = ("attachment; filename=financial-history-%s.csv" % stock_code)
 		resp.headers["Content-Type"] = "text/csv"

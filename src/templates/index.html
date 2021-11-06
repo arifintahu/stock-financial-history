@@ -15,6 +15,9 @@
                 <section id="section-search">
                     <div class="bg-white text-center p-3 mb-3 shadow-sm">
                         <div class="content d-flex px-5 mb-3">
+                            <input class="form-control form-control-lg" type="text" placeholder="Username" v-model="username">
+                        </div>
+                        <div class="content d-flex px-5 mb-3">
                             <input class="form-control form-control-lg" type="text" placeholder="Security Code" v-model="security_code">
                         </div>
                         <div class="content d-flex px-5">
@@ -41,12 +44,13 @@
                     return {
                         security_code: '',
                         stock_code: '',
+                        username: '',
                         loading: false
                     }
                 },
                 methods: {
                     downloadFile() {
-                        if (this.stock_code && this.security_code) {
+                        if (this.stock_code && this.security_code && this.username) {
                             this.loading = true;
                             fetch(`/download`, {
                                 method: 'POST',
@@ -55,7 +59,8 @@
                                 },
                                 body: JSON.stringify({
                                     stock_code: this.stock_code,
-                                    security_code: this.security_code
+                                    security_code: this.security_code,
+                                    username: this.username
                                 })
                             })
                             .then(response => response.blob())
